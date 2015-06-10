@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TextJoiner Improvements</title>
+	<meta name="keywords" content="tetjoiner, machine learning, eecs 349">
+	<meta name="description" content="Machine Learning Project For EECS 349 - Northwestern University">
+  <link rel="stylesheet" href="combo.css">
+  <link href='http://fonts.googleapis.com/css?family=Raleway:400,300,700' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
+  <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
+	<link rel="apple-touch-icon" href="img/tj.png">
+</head>
+<body>
+  <div id="main">
+
+    <nav><ul>
+      
+        
+        <li class="p-intro"><a href="#intro">home</a></li>
+      
+        
+        <li class="p-why"><a href="#why">Overview</a></li>
+      
+        
+        <li class="p-details"><a href="#details">Coreferencing</a></li>
+      
+        
+        <li class="p-usage"><a href="#usage">Dataset</a></li>
+      
+        
+        <li class="p-updating"><a href="#updating">Training/Testing</a></li>
+      
+        
+        <li class="p-video"><a href="#video">Conclusion</a></li>
+      
+        
+        <li class="p-links"><a href="#links">Links</a></li>
+      
+    </ul></nav>
+
+
+    
+      
+      <div id="intro" class="section p-intro">
+        
+        <div class="container center">
+          <p><span class="fa-stack subtlecircle" style="font-size:100px; background:rgba(255,166,0,0.1)">
+  <i class="fa fa-circle fa-stack-2x text-white"></i>
+  <i class="fa fa-bicycle fa-stack-1x text-orange"></i>
+</span></p>
+
+<h1 class="text-purple" id="textjoiner-improvements">TextJoiner Improvements</h1>
+
+<p>Project By: Tejaswinee Sohoni<br />
+tejaswineesohoni2015@u.northwestern.edu<br />
+EECS 349 - Northwestern University<br />
+Professor Doug Downey<br /></p>
+
+
+        </div>
+      </div>
+    
+      
+      <div id="why" class="section p-why">
+        
+        <div class="subtlecircle sectiondivider faicon">
+          <span class="fa-stack">
+            <i class="fa fa-circle fa-stack-2x"></i>
+            <i class="fa fa-check-square-o fa-stack-1x"></i>
+          </span>
+          <h5 class="icon-title">Overview</h5>
+        </div>
+        
+        <div class="container ">
+          <p align="justify">
+<strong>Automatically extracting information from the web is called Web Information Extraction. On demand Web Information Extraction systems allow users to search the web for textual queries, for instance, “Nobel Laureates from Austria”. This is done by specifying the query as a relation. However, such systems have to make a trade-off between precision and recall. Therefore, a new approach has been proposed by researchers in Prof. Downey’s group, in which queries are considered as conjunctions and disjunctions of multiple contexts instead of a single context. This offers high precision as well as high recall. This approach has been implemented in a system called TextJoiner. 
+</strong>
+<strong>
+However, the existing TextJoiner system does not take into account every mention of a particular entity in a piece of text. It misses out on the mentions of an entity where it is referred to with pronouns or equivalent words. This makes the task of coreference resolution interesting to the TextJoiner system. Coreference resolution means finding all the expressions that refer to the same entity in a text. If the TextJoiner system can understand this difference, it can discover more sentences about the entity being queried, and hence can extract more information out of the text.
+</strong>
+</p>
+
+
+        </div>
+      </div>
+    
+      
+      <div id="details" class="section p-details">
+        
+        <div class="subtlecircle sectiondivider faicon">
+          <span class="fa-stack">
+            <i class="fa fa-circle fa-stack-2x"></i>
+            <i class="fa fa-toggle-on fa-stack-1x"></i>
+          </span>
+          <h5 class="icon-title">Coreferencing</h5>
+        </div>
+        
+        <div class="container ">
+          <p align="justify">
+<strong>
+For coreferencing, I used the Stanford NLP library. This library provides a module for coreferencing. While it is not very easy to figure out its usage, it turns out that this module works quite well once one can figure it out. I used some sentences from a parsed Wikipedia page that is used by the actual TextJoiner system. The article I used was about Chicago. I used this module to clean the text, tokenize it, and annotate it. This is then used to build a parse tree of the current sentence and its corresponding dependency graph. Using this, I build a coreference link graph of chains, where each chain stores the mentions of a particular entity.
+</strong> 
+</p>
+
+
+        </div>
+      </div>
+    
+      
+      <div id="usage" class="section p-usage">
+        
+        <div class="subtlecircle sectiondivider faicon">
+          <span class="fa-stack">
+            <i class="fa fa-circle fa-stack-2x"></i>
+            <i class="fa fa-plug fa-stack-1x"></i>
+          </span>
+          <h5 class="icon-title">Dataset</h5>
+        </div>
+        
+        <div class="container ">
+          <p align="justify">
+<strong>
+After further processing the chains, I got the individual words or phrases from each chain, its corresponding sentence number and chain number. From this data, I arranged the phrases into every possible pair they could form, their corresponding sentence and chain numbers, whether they belonged to the same sentence or chain, and if they belonged to the same chain, the size of the chain they belonged to. So, essentially, the features of the dataset I formed were:
+<br />
+<ol>
+	<li>Phrase A</li>
+	<li>Phrase B</li>
+	<li>Sentence Number of Phrase A</li>
+	<li>Sentence Number of Phrase B</li>
+	<li>Chain Number of Phrase A</li>
+	<li>Chain Number of Phrase B</li>
+	<li>Whether A and B belong to the same chain</li>
+	<li>If A and B belong to the same chain, size of the chain</li>
+	<li>Result (Whether the Stanford library coreferences the pairs correctly or not)</li>
+</ol>
+</strong>
+</p>
+<p align="justify">
+<strong><br />
+I hand labeled the Result field. Initially for a paragraph of about 6 sentences, I got about 20000 pairs, which was too big a dataset for me to hand label, hence I cut down the text, and shortened some sentences. The text I finally used was:<br /><br />
+"Chicago is the third most populous city in the  United States . Its metropolitan area is sometimes called  Chicagoland. Chicago is the  seat  of  Cook County , a small part of the city extends into  DuPage County. It was incorporated as a city in 1837. Chicago is listed as an alpha+ global city. The best-known nicknames for the city include  Windy City  and  Second City. The City of Chicago was the fastest growing city in the world for several decades."
+<br /><br />
+With this text I got about 300 pairs, for which I hand labeled the data with Y if the coreferencing is correct and N if it is not. 
+</strong>
+</p>
+
+
+        </div>
+      </div>
+    
+      
+      <div id="updating" class="section p-updating">
+        
+        <div class="subtlecircle sectiondivider faicon">
+          <span class="fa-stack">
+            <i class="fa fa-circle fa-stack-2x"></i>
+            <i class="fa fa-cloud-upload fa-stack-1x"></i>
+          </span>
+          <h5 class="icon-title">Training/Testing</h5>
+        </div>
+        
+        <div class="container ">
+          <p align="justify">
+	<strong>
+		On the labeled dataset, I ran 5 algorithms, all with 10-fold cross validation. They gave different levels of accuracy, as shown below.
+		<ol>
+		<li>J48 (Decision Tree)- 90.4762% accuracy</li>
+		<li>Random Forest - 89.1156% accuracy</li>
+		<li>IBk (k Nearest Neighbors) - 85.034% accuracy</li>
+		<li>Naive Bayes - 79.932% accuracy</li>
+		<li>Multilayer Perceptron - 95.2531% accuracy</li>
+	</ol>
+	
+<p align="justify">
+	<strong>
+	From the above data, I think Multilayer Perceptron, followed by Decision Tree, is the best algorithm to see whether the predictions made by the Stanford library are accurate.
+</strong>
+</p>
+</strong></p>
+
+        </div>
+      </div>
+    
+      
+      <div id="video" class="section p-video">
+        
+        <div class="subtlecircle sectiondivider faicon">
+          <span class="fa-stack">
+            <i class="fa fa-circle fa-stack-2x"></i>
+            <i class="fa fa-film fa-stack-1x"></i>
+          </span>
+          <h5 class="icon-title">Conclusion</h5>
+        </div>
+        
+        <div class="container ">
+          <p><strong>
+	Overall, I think that the Stanford coref library works quite well for finding coreferences for a text, and I believe the module I have created is ready to be used with TextJoiner so that it can coreference text to improve its performance.
+</strong>
+</p>
+
+        </div>
+      </div>
+    
+      
+      <div id="links" class="section p-links">
+        
+        <div class="subtlecircle sectiondivider faicon">
+          <span class="fa-stack">
+            <i class="fa fa-circle fa-stack-2x"></i>
+            <i class="fa fa-check-square-o fa-stack-1x"></i>
+          </span>
+          <h5 class="icon-title">Links</h5>
+        </div>
+        
+        <div class="container ">
+          <p><strong>
+	Some Links You Might Want To Check Out:
+<br /><br /></strong>
+Project Report: <a href="FinalReport.pdf">Here!</a><br /><br />
+Paper Referred To For TextJoiner: <a href="TJPaper.pdf">Here!</a><br /><br />
+TextJoiner Website: http://websail-fe.cs.northwestern.edu/textjoiner/<br /><br />
+
+</p>
+
+        </div>
+      </div>
+    
+
+
+    <div id="footer" class="section text-white">
+      <div class="container">
+        
+        
+<p>Design by Tim O’Brien <a href="http://t413.com/">t413.com</a>
+—
+<a href="https://github.com/t413/SinglePaged">SinglePaged theme</a>
+—
+this site is <a href="https://github.com/t413/SinglePaged">open source</a></p>
+
+
+      </div>
+    </div>
+  </div>
+
+
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-49607422-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+
+</body>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="site.js"></script>
+</html>
